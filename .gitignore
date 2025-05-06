@@ -1,0 +1,20 @@
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Archivos generados por .NET (Binarios y Objetos)
+bin/
+obj/
+*.dll
+*.pdb
+*.cache
+*.log
+*.csprojAssemblyReference.cache
+
+# Ignorar carpetas específicas dentro del proyecto
+Venta.Application/obj/
+Venta.Application/bin/
+WebAPI/obj/
+WebAPI/bin/
