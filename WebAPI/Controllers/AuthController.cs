@@ -16,39 +16,36 @@ namespace WebAPI.Controllers
     {
         private readonly IJWTService _jwtService;
         private readonly ICrearCuentaService _crearCuentaService;
-        
 
-        public AuthController(IJWTService jwtService,ICrearCuentaService crearCuentaService)
+
+        public AuthController(IJWTService jwtService, ICrearCuentaService crearCuentaService)
         {
             _jwtService = jwtService;
-            _crearCuentaService = crearCuentaService;     
+            _crearCuentaService = crearCuentaService;
         }
 
         [HttpPost("login")]
-        public async Task <ActionResult> Login([FromBody] LoginDTO loginDTO)
+        public async Task<ActionResult> Login([FromBody] LoginDTO loginDTO)
         {
             if (!ModelState.IsValid)
-            {
                 return BadRequest(ModelState);
-            }
 
             var account = await _crearCuentaService.GetByCorreo(loginDTO.Email);
 
-            if (account == null)
-            {
-                return Unauthorized(new { message = "Correo o contraseña incorrectas" });
-            }
-
-            bool isValidPassword = BCrypt.Net.BCrypt.Verify(loginDTO.Password, account.Password);
-
-            if (!isValidPassword)
-            {
+            if (account == null || !BCrypt.Net.BCrypt.Verify(loginDTO.Password, account.Password))
                 return Unauthorized(new { message = "Correo o contraseña incorrectos." });
-            }
 
-            var token = _jwtService.GenerateJwtToken(account.Email, account.Role.ToString());
+            var token = await _jwtService.GenerateJwtToken(account.Email, account.Role.ToString());
 
-            return Ok(new { token, role = account.Role.ToString(), email = account.Email, userId = account.Id, });
+            var response = new LoginResponseDTO
+            {
+                Token = token,
+                Role = account.Role.ToString(),
+                Email = account.Email,
+                UserId = account.Id
+            };
+
+            return Ok(response);
         }
     }
 }
