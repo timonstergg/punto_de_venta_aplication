@@ -1,0 +1,19 @@
+﻿@page "/"
+@inject IJSRuntime JS
+@inject NavigationManager Nav
+
+<h3>Página principal</h3>
+<p>Ya estás autenticado y ves el menú lateral.</p>
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        var token = await JS.InvokeAsync<string>("localStorage.getItem", "token");
+
+        if (string.IsNullOrEmpty(token))
+        {
+            Nav.NavigateTo("/login", true); // Solo redirige si no hay token
+        }
+    }
+}
+

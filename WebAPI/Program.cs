@@ -22,7 +22,13 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("CorsPolicy",
-        policy => policy.WithOrigins("http://localhost:3000") // Permite solicitudes desde React
+        policy => policy.WithOrigins(
+                "http://localhost:3000", // Permite solicitudes desde React
+                "https://localhost:5003", // Blazor WASM
+                "http://localhost:5003",  // Blazor WASM sin HTTPS
+                "https://localhost:5173", // Vite
+                "http://localhost:5173",
+                "https://localhost:7058")
                         .AllowAnyMethod() // Permitir cualquier método (GET, POST, PUT, DELETE)
                         .AllowAnyHeader() // Permitir cualquier encabezado (Authorization, Content-Type, etc.)
                         .AllowCredentials()); // Permitir credenciales (tokens, cookies, etc.)
