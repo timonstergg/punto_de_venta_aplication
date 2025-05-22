@@ -69,6 +69,7 @@ builder.Services.AddScoped<IJWTService, JwtService>();
 builder.Services.AddScoped<ICrearCuentaService, CrearCuentaService>();
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<IPersonaService, PersonaService>();
+builder.Services.AddScoped<IProductoService, ProductoService>();
 
 var app = builder.Build();
 
