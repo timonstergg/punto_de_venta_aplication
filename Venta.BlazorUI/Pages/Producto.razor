@@ -1,6 +1,134 @@
-﻿@page "/Producto"
-<h3>Producto</h3>
+﻿@page "/producto"
+@using Venta.Shared.DTOs.DTOs
+@inject HttpClient Http
+
+<h3 class="mb-4">Gestión de Productos</h3>
+
+<EditForm Model="productoDTO" OnValidSubmit="GuardarProducto">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="row mb-3">
+        <div class="col">
+            <label>Nombre</label>
+            <InputText class="form-control" @bind-Value="productoDTO.Nombre" />
+        </div>
+        <div class="col">
+            <label>Precio</label>
+            <InputNumber class="form-control" @bind-Value="productoDTO.Precio" />
+        </div>
+        <div class="col">
+            <label>Stock</label>
+            <InputNumber class="form-control" @bind-Value="productoDTO.Stock" />
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary me-2">@(productoDTO.Id == 0 ? "Agregar" : "Actualizar")</button>
+    <button type="button" class="btn btn-secondary" @onclick="LimpiarFormulario">Cancelar</button>
+
+    @if (!string.IsNullOrEmpty(errorMessage))
+    {
+        <div class="alert alert-danger mt-3">@errorMessage</div>
+    }
+</EditForm>
+
+<hr />
+
+<h5>Listado de productos</h5>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Precio</th>
+            <th>Stock</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var p in productos)
+        {
+            <tr>
+                <td>@p.Nombre</td>
+                <td>@p.Precio</td>
+                <td>@p.Stock</td>
+                <td>
+                    <button class="btn btn-sm btn-warning me-2" @onclick="@(() => CargarParaEditar(p))">Editar</button>
+                    <button class="btn btn-sm btn-danger" @onclick="@(() => EliminarProducto(p.Id))">Eliminar</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
 
 @code {
+    private ProductoDTO productoDTO = new();
+    private List<ProductoDTO> productos = new();
+    private string errorMessage = string.Empty;
 
+    protected override async Task OnInitializedAsync()
+    {
+        await CargarProductos();
+    }
+
+    private async Task CargarProductos()
+    {
+        productos = await Http.GetFromJsonAsync<List<ProductoDTO>>("api/Productos") ?? new();
+    }
+
+    private async Task GuardarProducto()
+    {
+        HttpResponseMessage response;
+
+        if (productoDTO.Id == 0)
+            response = await Http.PostAsJsonAsync("api/Productos", productoDTO);
+        else
+            response = await Http.PutAsJsonAsync($"api/Productos/{productoDTO.Id}", productoDTO);
+
+        if (response.IsSuccessStatusCode)
+        {
+            await CargarProductos();
+            LimpiarFormulario();
+        }
+        else
+        {
+            errorMessage = "Error al guardar el producto.";
+        }
+    }
+
+    private void CargarParaEditar(ProductoDTO p)
+    {
+        productoDTO = new ProductoDTO
+            {
+                Id = p.Id,
+                Nombre = p.Nombre,
+                Precio = p.Precio,
+                Stock = p.Stock
+            };
+    }
+
+    private async Task EliminarProducto(int id)
+    {
+        var confirm = await JS.InvokeAsync<bool>("confirm", $"¿Eliminar producto {id}?");
+        if (!confirm) return;
+
+        var response = await Http.DeleteAsync($"api/Productos/{id}");
+
+        if (response.IsSuccessStatusCode)
+        {
+            await CargarProductos();
+        }
+        else
+        {
+            errorMessage = "No se pudo eliminar el producto.";
+        }
+    }
+
+    private void LimpiarFormulario()
+    {
+        productoDTO = new();
+        errorMessage = string.Empty;
+    }
+
+    [Inject]
+    private IJSRuntime JS { get; set; } = default!;
 }
