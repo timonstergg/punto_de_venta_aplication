@@ -65,8 +65,17 @@ namespace Venta.Infrastructure.Repository
 
             _context.Set<T>().Update(entity);
             return await _context.SaveChangesAsync() > 0;
-        }
 
+        }
+        public async Task DeleteById(int id)
+        {
+            var entity = await _dbSet.FindAsync(id);
+            if (entity != null)
+            {
+                _dbSet.Remove(entity);
+                await Save();
+            }
+        }
     }
 }
 

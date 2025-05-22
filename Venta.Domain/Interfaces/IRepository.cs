@@ -14,5 +14,7 @@ namespace Venta.Domain.Interfaces
         Task<bool> Update(T entity);
         Task Delete(T entity);
         Task Save();
+
+        Task DeleteById(int id);
     }
 }
