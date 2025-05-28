@@ -11,9 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Venta.Infrastructure", "Ven
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebAPI", "WebAPI\WebAPI.csproj", "{587EC246-01D1-4EF4-9D35-4A5BEDB1A819}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Venta.BlazorUI", "Venta.BlazorUI\Venta.BlazorUI.csproj", "{3C11D81C-B3C6-4FE5-BB33-137B5598A145}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Venta.BlazorUI", "Venta.BlazorUI\Venta.BlazorUI.csproj", "{3C11D81C-B3C6-4FE5-BB33-137B5598A145}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Venta.Shared.DTOs", "Venta.Shared.DTOs\Venta.Shared.DTOs.csproj", "{7088E260-2F2D-4821-B19F-57E772ABBBC8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Venta.Shared.DTOs", "Venta.Shared.DTOs\Venta.Shared.DTOs.csproj", "{7088E260-2F2D-4821-B19F-57E772ABBBC8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

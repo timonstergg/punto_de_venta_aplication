@@ -2,8 +2,34 @@
 @inject IJSRuntime JS
 @inject NavigationManager Nav
 
-<h3>Página principal</h3>
-<p>Ya estás autenticado y ves el menú lateral.</p>
+<div class="row">
+    <div class="col-md-4">
+        <div class="card text-white bg-primary mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Clientes</h5>
+                <p class="card-text">Gestión de clientes registrados</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card text-white bg-success mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Productos</h5>
+                <p class="card-text">Consulta y administra inventario</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card text-white bg-info mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Ventas</h5>
+                <p class="card-text">Resumen de operaciones recientes</p>
+            </div>
+        </div>
+    </div>
+</div>
 
 @code {
     protected override async Task OnInitializedAsync()
